@@ -10,20 +10,20 @@ const helpQueriesModel = require("../models/helpQueriesModel");
 exports.getHelpQueries=(req,res)=>{
     
     
-    helpQueriesModel.find({},(err,data)=>{
-        if(err){
-            res.json(err);
-        }
-        else{
+    helpQueriesModel.find({}).populate('profileID').exec((err,data)=>{
+        if(!err){
             res.json(data);
         }
-    });
+        else{
+            res.json(err);
+        }
+    })
 }
 
 exports.getHelpQueriesByID=(req,res)=>{
-    userID=req.params.ID;
-    console.log(userID);
-    helpQueriesModel.find({userID:userID},{},(err,data)=>{
+    id=req.params.ID;
+    // console.log(userID);
+    helpQueriesModel.find({_id:id},{},(err,data)=>{
         if(err){
             res.json(err);
         }
@@ -38,13 +38,15 @@ exports.postHelpQueries=async (req,res)=>{
    
     const data=req.body.data;
     const userID=req.body.userID;
+    const profileID=req.body.profileID;
 
  
 
     const newHelpQuery = new helpQueriesModel({
         _id:mongoose.Types.ObjectId(),
         data:data,
-        userID:userID
+        userID:userID,
+        profileID:profileID
         
     })
     newHelpQuery.save(function(err,result){

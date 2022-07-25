@@ -41,7 +41,7 @@ exports.postLogin = async (req, res) => {
                 session.userid=req.body.emailAddress;
                 session.count=0;
                 console.log(req.session)
-                res.json("Well come");
+                res.json(data);
             }
             else{
                 res.json("Wrong Password")
@@ -53,7 +53,7 @@ exports.postLogin = async (req, res) => {
             res.json("Invalid Email");
         }
     } else {
-        res.json(data);
+        res.json(err);
 
 
      

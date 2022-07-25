@@ -12,6 +12,7 @@ var count =0;
 exports.getCheckLogin=(req,res)=>{
 
     session=req.session;
+    const id=session.userid;
     if(session.userid){
         
         res.json("Welcome User <a href=\'/logout'>click to logout</a>"+session.count++);

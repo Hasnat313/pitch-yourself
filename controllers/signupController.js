@@ -8,6 +8,8 @@ const app=express();
 app.use(bodyParser.json());
 
 
+
+
 exports.getSignup=(req,res)=>{
     
     
@@ -20,7 +22,18 @@ exports.getSignup=(req,res)=>{
         }
     });
 }
+exports.getSingleUser=(req,res)=>{
+    userID=req.body.userID;
+    signupModel.find({_id:userID},(err,data)=>{
+        if(err){
+            res.json(err);
+        }
+        else{
+            res.json(data);
+        }
+    });
 
+}
 exports.postSignup=async (req,res)=>{
 
    

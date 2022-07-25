@@ -3,7 +3,7 @@ const express = require("express");
 
 const adminLoginModel = require("../models/adminLoginModel");
 const bodyParser = require("body-parser");
-const bcrypt = require("bcrypt");
+
 // const session = require("express-session");
 const app = express();
 app.use(bodyParser.json());
@@ -41,7 +41,7 @@ exports.postAdminLogin = async (req, res) => {
                 session.userid=req.body.emailAddress;
                 session.count=0;
                 console.log(req.session)
-                res.json("Well come");
+                res.json(data);
             }
             else{
                 res.json("Wrong Password")
@@ -53,7 +53,7 @@ exports.postAdminLogin = async (req, res) => {
             res.json("Invalid Email");
         }
     } else {
-        res.json(data);
+        res.json(err);
 
 
      
