@@ -7,11 +7,21 @@ const managePostsSchema=mongoose.Schema({
     videoUrl:String,
     creators:[String],
     hashTags:[String],
-    recommendation:{
+    recommendation:[{
         type:mongoose.Schema.Types.ObjectId,
         ref:"recommendations"
+    }],
+    userID:
+    {
+        type:mongoose.Schema.Types.ObjectId,
+        required:true
     },
-    userID:mongoose.Schema.Types.ObjectId
+    profileID:
+    {
+        type:mongoose.Schema.Types.ObjectId,
+        required:true
+    },
+
 })
 
 const managePostsModel=mongoose.model("Posts",managePostsSchema,"Posts");

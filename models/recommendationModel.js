@@ -6,7 +6,11 @@ const recommendationSchema=mongoose.Schema({
     userToWhomRecommendID:mongoose.Schema.Types.ObjectId,
     profileID:mongoose.Schema.Types.ObjectId,
     pitchID:mongoose.Schema.Types.ObjectId,
-    data:String
+    data:String,
+    Type:{
+        type:String,
+        required:true
+    }
 })
 
 const recommendationModel=mongoose.model("recommendations",recommendationSchema,"recommendations");

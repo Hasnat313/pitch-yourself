@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 
 const manageProjectsModel = require("../models/manageProjectsModel");
 
-
+const profileModel = require("../models/ProfileModel");
 
 
 
@@ -20,12 +20,16 @@ exports.getProjects=(req,res)=>{
 }
 
 exports.postProject = async (req, res) => {
+    var id;
+    var obj={};
     const projectTitle=req.body.projectTitle;
     const videoUrl=req.body.videoUrl;
     const description=req.body.description;
     const hashTags=req.body.hashTags
     const people=req.body.people;
     const Type=req.body.Type;
+    const userID=req.body.userID;
+    const profileID=req.body.profileID;
  
 
     const newProject = new manageProjectsModel({
@@ -36,11 +40,38 @@ exports.postProject = async (req, res) => {
         description:description,
         hashTags:hashTags,
         people:people,
-        Type:Type        
+        Type:Type,
+        userID:userID,
+        profileID:profileID,
+
     })
     newProject.save(function(err,result){
         if(!err){
-            res.json(result)
+            obj.resp = result;
+            id=result._id;
+          projectID = [];
+          console.log(id);
+          profileModel.findOne({ _id: profileID, userID: userID }, (err, data) => {
+            if (!err) {
+              // console.log(data);
+              projectID = data.projectID;
+              console.log(projectID);
+              projectID.push(id);
+    
+              profileModel.updateOne({ _id: profileID, userID: userID },{ projectID: projectID },(err, data) => {
+                  // console.log("added to profile");
+                 obj.projectAddedToProfile=data;
+    
+                  
+                  // res.json(result)
+                }
+              );
+            }
+          });
+          setTimeout(() => {
+            
+              res.json(obj);
+          }, 100);
         }
         else{
             res.json(err);
@@ -53,7 +84,7 @@ exports.deleteProject=(req,res)=>{
    const  id=req.body.id;
     manageProjectsModel.deleteOne({_id:id},(err,resp)=>{
         if(!err){
-            res.json(resp)
+          res.json(resp);
         }
         else{
             res.json(err);

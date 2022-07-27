@@ -7,6 +7,7 @@ const profileModel = require("../models/ProfileModel");
 
 
 
+
 exports.getProfile=(req,res)=>{
     
     const id=req.params.id;
@@ -31,7 +32,7 @@ exports.getAllProfile=(req,res)=>{
 
 
     profileModel.find().
-    populate([{path:'postID',select:"recommendation",populate:{path:'recommendation'}},'projectID','questionID','jobID']).
+    populate(['spostID','projectID','questionID','jobID']).
     // poulate('projectID').
     exec((err,data)=>{
         if(!err){
@@ -58,12 +59,9 @@ exports.postCompleteProfile=async (req,res)=>{
     const description=req.body.description;
     const socialLinks=req.body.socialLinks;
     const videoUrl=req.body.videoUrl;
-    const docUrl=req.body.docUrl;
+    
     const emailAddress=req.body.emailAddress;
-    const postID=req.body.postID
-    const jobID=req.body.jobID
-    const projectID=req.body.projectID
-    const questionID=req.body.questionID
+   
 
     
     const newprofile = new profileModel({
@@ -78,13 +76,9 @@ exports.postCompleteProfile=async (req,res)=>{
         description:description,
         socialLinks:socialLinks,
         videoUrl:videoUrl,
-        docUrl:docUrl,
+        
         emailAddress:emailAddress,
-        postID:postID,
-        jobID:jobID,
-        questionID:questionID,
-        projectID:projectID
-
+ 
         
         
     })
@@ -125,7 +119,7 @@ exports.putUpdateProfile=(req,res)=>{
     const description=req.body.description;
     const socialLinks=req.body.socialLinks;
     const videoUrl=req.body.videoUrl;
-    const docUrl=req.body.docUrl;
+    
         
         profileModel.updateOne({
             _id:id
@@ -139,7 +133,7 @@ exports.putUpdateProfile=(req,res)=>{
             description:description,
             socialLinks:socialLinks,
             videoUrl:videoUrl,
-            docUrl:docUrl
+            
             
         }, {
             // upsert: true
@@ -152,3 +146,38 @@ exports.putUpdateProfile=(req,res)=>{
         })
 
 }
+
+// exports.putAddPitches=(req,res)=>{
+//     const id = req.body.id;
+    
+//     const postID=req.body.postID
+
+//     managePostsModel.findOne({_id:postID},(err,data)=>{
+//         if(!err){
+//             profileModel.find
+//         }
+//     })
+//     const jobID=req.body.jobID
+//     const projectID=req.body.projectID
+//     const questionID=req.body.questionID
+        
+//         profileModel.updateOne({
+//             _id:id
+//         }, {
+//             postID:postID,
+//             jobID:jobID,
+//             questionID:questionID,
+//             projectID:projectID
+    
+            
+//         }, {
+//             // upsert: true
+//         }, function (err, foundResult) {
+//             try {
+//                 res.json(foundResult)
+//             } catch (err) {
+//                 res.send(err)
+//             }
+//         })
+
+// }

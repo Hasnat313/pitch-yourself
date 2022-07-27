@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 
 const manageQuestionsModel = require("../models/manageQuestionsModel");
+const profileModel = require("../models/ProfileModel");
 
 
 
@@ -20,11 +21,15 @@ exports.getQuestion=(req,res)=>{
 }
 
 exports.postQuestion = async (req, res) => {
+    var id;
+    var obj={};
     const questionTitle=req.body.questionTitle;
     const videoUrl=req.body.videoUrl;
     const questionReason=req.body.questionReason;
     const hashTags=req.body.hashTags
     const Type=req.body.Type;
+    const userID=req.body.userID;
+    const profileID=req.body.profileID;
 
  
 
@@ -34,12 +39,38 @@ exports.postQuestion = async (req, res) => {
         videoUrl:videoUrl,
         questionReason:questionReason,
         hashTags:hashTags,
-        Type:Type
+        Type:Type,
+        userID:userID,
+        profileID:profileID
         
     })
     newQuestion.save(function(err,result){
         if(!err){
-            res.json(result)
+            obj.resp = result;
+            id=result._id;
+          questionID = [];
+          console.log(id);
+          profileModel.findOne({ _id: profileID, userID: userID }, (err, data) => {
+            if (!err) {
+              // console.log(data);
+              questionID = data.questionID;
+              console.log(questionID);
+              questionID.push(id);
+    
+              profileModel.updateOne({ _id: profileID, userID: userID },{ questionID: questionID },(err, data) => {
+                  // console.log("added to profile");
+                 obj.questionAddedToProfile=data;
+    
+                  
+                  // res.json(result)
+                }
+              );
+            }
+          });
+          setTimeout(() => {
+            
+              res.json(obj);
+          }, 100);
         }
         else{
             res.json(err);

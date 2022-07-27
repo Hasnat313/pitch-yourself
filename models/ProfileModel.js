@@ -28,8 +28,14 @@ const profileSchema=mongoose.Schema({
     hashTags:[String],
     description:String,
     socialLinks:[String],
-    videoUrl:String,
-    docUrl:String,
+    video:[{
+      type:mongoose.Schema.Types.ObjectId,
+      ref:'profileVideos'
+    }],
+    docUrl:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'documents'
+    }]
 
     
 })

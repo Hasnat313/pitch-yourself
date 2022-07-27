@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 
 const manageJobsModel = require("../models/manageJobsModel");
 
-
+const profileModel = require("../models/ProfileModel");
 
 
 
@@ -20,6 +20,8 @@ exports.getJobs=(req,res)=>{
 }
 
 exports.postJob = (req, res) => {
+    var id;
+    var obj={};
     const jobTitle=req.body.jobTitle;
     const companyName=req.body.companyName;
     const videoUrl=req.body.videoUrl;
@@ -29,6 +31,8 @@ exports.postJob = (req, res) => {
     const salaryRange=req.body.salaryRange
     const startDate=req.body.startDate
     const Type=req.body.Type;
+    const userID=req.body.userID;
+    const profileID=req.body.profileID;
  
 
     const newJob = new manageJobsModel({
@@ -41,19 +45,47 @@ exports.postJob = (req, res) => {
          location:location,
          salaryRange:salaryRange,
          startDate:startDate,
-         Type:Type
+         Type:Type,
+         userID:userID,
+         profileID:profileID
+         
      
         
     })
     newJob.save(function(err,result){
         if(!err){
-            res.json(result)
+            obj.resp = result;
+            id=result._id;
+          jobID = [];
+          console.log(id);
+          profileModel.findOne({ _id: profileID, userID: userID }, (err, data) => {
+            if (!err) {
+              // console.log(data);
+              jobID = data.jobID;
+              console.log(jobID);
+              jobID.push(id);
+    
+              profileModel.updateOne({ _id: profileID, userID: userID },{ jobID: jobID },(err, data) => {
+                  // console.log("added to profile");
+                 obj.jobAddedToProfile=data;
+    
+                  
+                  // res.json(result)
+                }
+              );
+            }
+          });
+          setTimeout(() => {
+            
+              res.json(obj);
+          }, 100);
         }
         else{
             res.json(err);
         }
     });
 
+  
 }
 
 exports.deleteJob=(req,res)=>{

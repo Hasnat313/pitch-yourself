@@ -10,7 +10,21 @@ const manageJobsSchema=mongoose.Schema({
     location:String,
     salaryRange:String,
     startDate:String,
-    hashTags:[String]
+    hashTags:[String],
+    userID:
+    {
+        type:mongoose.Schema.Types.ObjectId,
+        required:true
+    },
+    profileID:
+    {
+        type:mongoose.Schema.Types.ObjectId,
+        required:true
+    },
+    recommendation:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"recommendations"
+    }],
 })
 
 const manageJobsModel=mongoose.model("Jobs",manageJobsSchema,"Jobs");

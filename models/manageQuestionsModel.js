@@ -6,7 +6,22 @@ const manageQuestionSchema=mongoose.Schema({
     videoUrl:String,
     Type:String,
     questionReason:String,
-    hashTags:[String]
+    hashTags:[String],
+    userID:
+    {
+        type:mongoose.Schema.Types.ObjectId,
+        required:true
+    },
+    profileID:
+    {
+        type:mongoose.Schema.Types.ObjectId,
+        required:true
+    },
+    recommendation:
+    [{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"recommendations"
+    }],
 })
 
 const manageQuestionModel=mongoose.model("Questions",manageQuestionSchema,"Questions");

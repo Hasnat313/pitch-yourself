@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    chat app
+
+    <form id="msg-form">
+      <input type="text" name="msg" placeholder="Message" />
+      <input type="text" name="socketid" placeholder="SocketID" />
+      <input type="file" name="image" placeholder="SocketID" />
+      <button>send</button>
+    </form>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+
+
+      console.log("hello world");
+      const socket = io();
+      // Pak();
+      socket.on("newCon", (msg) => {
+        console.log(msg);
+      });
+      socket.emit("startChat","how r u");
+
+      document.querySelector("#msg-form").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const message = e.target.elements.msg.value;
+        const socketid = e.target.elements.socketid.value;
+        const image = e.target.elements.image.value;
+        // document.querySelector("input").value=" ";
+        var obj={}
+        obj.message=message;
+        obj.socketid=socketid
+        obj.image=image
+        // console.log(msg);
+        socket.emit("formSubmit", obj);
+        socket.on("res", (data) => {
+          console.log(data);
+        });
+      });
+
+
+    </script>
+    <!-- <script type="text/javascript" src="/chat.js"></script> -->
+    <!-- <script type="text/javascript" src="/js/chk.js"></script> -->
+  </body>
+</html>

@@ -2,12 +2,23 @@ const mongoose = require("mongoose");
 const express = require("express");
 const signupModel = require("../models/userSignupModel");
 const loginModel = require("../models/userLoginModel");
+const userOTPVerificationModel = require("../models/userOTPVerificationModel");
 const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt");
+const nodemailer = require('nodemailer');
+const { search } = require("../routes/homeRoute");
+require('dotenv').config();
 // const session = require("express-session");
 const app = express();
 app.use(bodyParser.json());
 app.use(express.json());
+const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+       user: process.env.email,
+       pass: process.env.password,
+    },
+});
 
 // exports.getSignup=(req,res)=>{
 
@@ -60,21 +71,78 @@ exports.postLogin = async (req, res) => {
     
     }
   });
+}
+ 
+exports.sendOtp=(req,res)=>{
 
+    try{
+
+        emailAddress=req.body.emailAddress;
+        const otp= `${Math.floor(1000+Math.random()*9000)}`
+        console.log(otp)
+       
+
+         
+       const newOTPVerif= new userOTPVerificationModel({
+        // userId:_id,
+        emailAddress:emailAddress,
+        otp : otp,
+       })
+       
+        newOTPVerif.save();
+        transporter.sendMail({
+            from:process.env.EMAIL_USERNAME,
+             to: emailAddress,
+             subject: 'Verify Account',
+             html: "<h3>OTP for Pitch YourSelf </h3>" + "<h1 style='font-weight:bold;'>" + otp + "</h1>"
+             
+           });
+           res.json({
+             message: `Sent a verification email to ${emailAddress}`,
+             status:"pending",
+             data:{
+                otp:otp
+             }
+           });
+
+    }
+    catch(err){
+        
+    }
+
+}
+
+
+exports.verifyOTP=(req,res)=>{
+
+    otp=req.body.otp;
+    emailAddress=req.body.emailAddress;
+    newPassword=req.body.newPassword
+    userOTPVerificationModel.findOne({emailAddress:emailAddress,otp:otp},(err,data)=>{
+    
+        if(!err){
+            signupModel.updateOne({emailAddress:emailAddress},{password:newPassword},(err,data)=>{
+              if(!err) {
+                res.json(data);
+            }
+              else{
+                res.json(err);
+              }
+            })
+
+            setTimeout(() => {
+                userOTPVerificationModel.deleteOne({emailAddress:emailAddress},(err,data)=>{
+                    if(!err){
+                        console.log(data);
+                    }
+                })
+        }, 200);
+        }
+        else{
+            res.json(err);
+        }
+        
+    })
  
 
-
-
-//   const newSignup = new signupModel({
-//     _id: mongoose.Types.ObjectId(),
-//     emailAddress: emailAddress,
-//     password: hashPassword,
-//   });
-//   newSignup.save(function (err, result) {
-//     if (!err) {
-//       res.json(result);
-//     } else {
-//       res.json(err);
-//     }
-//   });
-};
+}
