@@ -81,7 +81,7 @@ exports.postProject = async (req, res) => {
 }
 
 exports.deleteProject=(req,res)=>{
-   const  id=req.body.id;
+   const  id=req.body.projectID;
     manageProjectsModel.deleteOne({_id:id},(err,resp)=>{
         if(!err){
           res.json(resp);
@@ -98,7 +98,7 @@ exports.putProject=(req,res)=>{
     const description=req.body.description;
     const hashTags=req.body.hashTags
     const people=req.body.people;
- 
+    const id=req.body.profileID
     var hashTags1=[];
     var people1=[]
     

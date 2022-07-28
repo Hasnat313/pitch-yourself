@@ -57,10 +57,16 @@ exports.downloadDoc=(req,res)=>{
   const docID=req.body.docID
   const userID=req.body.userID
   const profileID=req.body.profileID;
-  docModel.find({_id:docID,userID:userID,profileID:profileID},(err,data)=>{
+  docModel.findOne({_id:docID,userID:userID,profileID:profileID},(err,data)=>{
     if(!err){
+      if(data.private===false){
+        // err.status="private";
+        res.json("Document is not private")
+
+      }
+      else{
       res.json(data);
-    }
+    }}
   })
 
 

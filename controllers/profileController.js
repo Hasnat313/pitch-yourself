@@ -32,7 +32,7 @@ exports.getAllProfile=(req,res)=>{
 
 
     profileModel.find().
-    populate(['spostID','projectID','questionID','jobID']).
+    populate(['postID','projectID','questionID','jobID']).
     // poulate('projectID').
     exec((err,data)=>{
         if(!err){
@@ -75,8 +75,6 @@ exports.postCompleteProfile=async (req,res)=>{
         hashTags:hashTags,
         description:description,
         socialLinks:socialLinks,
-        videoUrl:videoUrl,
-        
         emailAddress:emailAddress,
  
         
@@ -108,8 +106,8 @@ exports.postCompleteProfile=async (req,res)=>{
 // }
 
 exports.putUpdateProfile=(req,res)=>{
-    const id = req.body.id;
-    
+    const id = req.body.profileID;
+    const userID=req.body.userID;
     const photoUrl=req.body.photoUrl
     const name=req.body.name
     const proffesion=req.body.proffesion
@@ -122,7 +120,7 @@ exports.putUpdateProfile=(req,res)=>{
     
         
         profileModel.updateOne({
-            _id:id
+            _id:id,userID:userID
         }, {
             photoUrl:photoUrl,
             name:name,
@@ -181,3 +179,5 @@ exports.putUpdateProfile=(req,res)=>{
 //         })
 
 // }
+
+

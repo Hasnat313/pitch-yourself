@@ -10,9 +10,23 @@ const profileVideoSchema=mongoose.Schema({
     uploadImage:String,
     links:[String],
     contacts:[String],
-    userID:mongoose.Schema.Types.ObjectId,
-    profileID:mongoose.Schema.Types.ObjectId
+    userID:{
+        type:mongoose.Schema.Types.ObjectId,
+        required:true},
+    profileID:{
+        type:mongoose.Schema.Types.ObjectId,
+        required:true}
 })
 
 const profileVideoModel=mongoose.model("profileVideos",profileVideoSchema,"profileVideos");
 module.exports=profileVideoModel;
+
+
+
+
+
+
+
+
+
+

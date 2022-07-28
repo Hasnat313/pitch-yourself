@@ -26,3 +26,5 @@ const managePostsSchema=mongoose.Schema({
 
 const managePostsModel=mongoose.model("Posts",managePostsSchema,"Posts");
 module.exports=managePostsModel;
+
+  

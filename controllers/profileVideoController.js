@@ -67,7 +67,7 @@ exports.postProfileVideo = (req, res) => {
 }
 
 exports.deleteProfileVideo = (req, res) => {
-  const id = req.body.id;
+  const id = req.body.videoID;
   profileVideoModel.deleteOne({ _id: id }, (err, resp) => {
     if (!err) {
       res.json(resp);
@@ -78,7 +78,7 @@ exports.deleteProfileVideo = (req, res) => {
 };
 
 exports.putProfileVideo = (req, res) => {
-    const id=req.body.id;
+    const id=req.body.videoID;
     const videoTitle=req.body.videoTitle;
     const videoUrl=req.body.videoUrl;
     const description=req.body.description;

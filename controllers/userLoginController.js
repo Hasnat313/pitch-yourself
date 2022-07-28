@@ -119,24 +119,26 @@ exports.verifyOTP=(req,res)=>{
     emailAddress=req.body.emailAddress;
     newPassword=req.body.newPassword
     userOTPVerificationModel.findOne({emailAddress:emailAddress,otp:otp},(err,data)=>{
-    
-        if(!err){
+
+        if(!err && data!=null){
             signupModel.updateOne({emailAddress:emailAddress},{password:newPassword},(err,data)=>{
               if(!err) {
+                console.log("cjk");
                 res.json(data);
+                setTimeout(() => {
+                    userOTPVerificationModel.deleteOne({emailAddress:emailAddress},(err,data)=>{
+                        if(!err){
+                            console.log(data);
+                        }
+                    })
+            }, 200);
             }
               else{
                 res.json(err);
               }
             })
 
-            setTimeout(() => {
-                userOTPVerificationModel.deleteOne({emailAddress:emailAddress},(err,data)=>{
-                    if(!err){
-                        console.log(data);
-                    }
-                })
-        }, 200);
+          
         }
         else{
             res.json(err);

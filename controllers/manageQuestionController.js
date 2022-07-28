@@ -9,8 +9,8 @@ const profileModel = require("../models/ProfileModel");
 
 
 exports.getQuestion=(req,res)=>{
-    // id=req.body.id;
-    manageQuestionsModel.find({},(err,data)=>{
+    userID=req.body.userID;
+    manageQuestionsModel.find({userID:userID},(err,data)=>{
         if(err){
             res.json(err);
         }
@@ -80,7 +80,7 @@ exports.postQuestion = async (req, res) => {
 }
 
 exports.deleteQuestion=(req,res)=>{
-   const  id=req.body.id;
+   const  id=req.body.questionID;
     manageQuestionsModel.deleteOne({_id:id},(err,resp)=>{
         if(!err){
             res.json(resp)
@@ -92,7 +92,7 @@ exports.deleteQuestion=(req,res)=>{
 }
 
 exports.putQuestion=(req,res)=>{
-    const id=req.body.id;
+    const id=req.body.questionID;
     const questionTitle=req.body.questionTitle;
     const videoUrl=req.body.videoUrl;
     const questionReason=req.body.questionReason;

@@ -8,7 +8,7 @@ const profileModel = require("../models/ProfileModel");
 
 
 exports.getJobs=(req,res)=>{
-    // id=req.body.id;
+    id=req.body.userID;
     manageJobsModel.find({},(err,data)=>{
         if(err){
             res.json(err);
@@ -89,7 +89,7 @@ exports.postJob = (req, res) => {
 }
 
 exports.deleteJob=(req,res)=>{
-   const  id=req.body.id;
+   const  id=req.body.jobID;
     manageJobsModel.deleteOne({_id:id},(err,resp)=>{
         if(!err){
             res.json(resp)
@@ -101,7 +101,7 @@ exports.deleteJob=(req,res)=>{
 }
 
 exports.putJob=(req,res)=>{
-    const id=req.body.id;
+    const id=req.body.jobID;
     const jobTitle=req.body.jobTitle;
     const companyName=req.body.companyName;
     const videoUrl=req.body.videoUrl;

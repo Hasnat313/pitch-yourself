@@ -4,8 +4,8 @@ const managePostsModel = require("../models/managePostsModels");
 const profileModel = require("../models/ProfileModel");
 
 exports.getPosts = (req, res) => {
-  // id=req.body.id;
-  managePostsModel.find({}, (err, data) => {
+  userID=req.body.userID;
+  managePostsModel.find({userID:userID}, (err, data) => {
     if (err) {
       res.json(err);
     } else {
@@ -22,7 +22,7 @@ exports.postPost = (req, res) => {
   const creators = req.body.creators;
   const hashTags = req.body.hashTags;
   const Type = req.body.Type;
-  const recommendation = req.body.recommendation;
+
   const userID = req.body.userID;
   const profileID = req.body.profileID;
 
@@ -33,7 +33,6 @@ exports.postPost = (req, res) => {
     creators: creators,
     hashTags: hashTags,
     Type: Type,
-
     userID: userID,
     profileID: profileID,
   });
@@ -72,7 +71,7 @@ exports.postPost = (req, res) => {
 };
 
 exports.deletePost = (req, res) => {
-  const id = req.body.id;
+  const id = req.body.postID;
   managePostsModel.deleteOne({ _id: id }, (err, resp) => {
     if (!err) {
       res.json(resp);
@@ -83,7 +82,7 @@ exports.deletePost = (req, res) => {
 };
 
 exports.putPost = (req, res) => {
-  const id = req.body.id;
+  const id = req.body.postID;
   const postTitle = req.body.postTitle;
   const videoUrl = req.body.videoUrl;
   const creators = req.body.creators;
