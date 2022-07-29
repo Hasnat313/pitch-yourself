@@ -2,6 +2,8 @@ const mongoose = require("mongoose");
 
 const docModel = require("../models/docModel");
 const profileModel = require("../models/ProfileModel");
+const documentStatusModel = require("../models/docDownloadStatusModel");
+const { response } = require("express");
 // const profileModel = require("../models/ProfileModel");
 
 // exports.getProfileVideos = (req, res) => {
@@ -53,21 +55,52 @@ exports.postDoc = (req, res) => {
     }
   })
 }
-exports.downloadDoc=(req,res)=>{
+exports.downloadDocRequest=(req,res)=>{
   const docID=req.body.docID
   const userID=req.body.userID
   const profileID=req.body.profileID;
-  docModel.findOne({_id:docID,userID:userID,profileID:profileID},(err,data)=>{
-    if(!err){
-      if(data.private===false){
-        // err.status="private";
-        res.json("Document is not private")
+  
+  const userIDWhoRequested=req.body.userIDWhoRequested;
 
-      }
-      else{
-      res.json(data);
-    }}
+  const newdocStatus = new documentStatusModel({
+    _id: mongoose.Types.ObjectId(),
+    docID:docID,
+    userID:userID,
+    profileID:profileID,
+    grantAccess:"pending",
+    userIDWhoRequested:userIDWhoRequested,
   })
+  newdocStatus.save(function(err,result){
+    if(!err){
+      res.json(result);
+    } 
+    else{ 
+      res.json(err)
+    }
+    })
 
 
+}
+
+exports.changeStatusTrue =(req, res)=>{
+  const requestID=req.body.requestID;
+  documentStatusModel.updateOne({_id:requestID},{grantAccess:"true"},(err,data)=>{
+    if(!err) {
+      res.json(data);
+    }
+    else{
+    res.json(err);
+    }
+  });
+}
+exports.changeStatusFalse =(req, res)=>{
+  const requestID=req.body.requestID;
+  documentStatusModel.updateOne({_id:requestID},{grantAccess:"false"},(err,data)=>{
+    if(!err) {
+      res.json(data);
+    }
+    else{
+    res.json(err);
+    }
+  });
 }

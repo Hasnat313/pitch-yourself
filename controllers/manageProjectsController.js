@@ -98,13 +98,13 @@ exports.putProject=(req,res)=>{
     const description=req.body.description;
     const hashTags=req.body.hashTags
     const people=req.body.people;
-    const id=req.body.profileID
+    const id=req.body.projectID
     var hashTags1=[];
     var people1=[]
     
   
         manageProjectsModel.findOne({_id:id},  (err,data)=>{
-        
+            console.log(data);
             hashTags1=data.hashTags
             console.log("first",hashTags1);
             people1=data.people;

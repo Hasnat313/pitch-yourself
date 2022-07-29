@@ -101,7 +101,7 @@ exports.putQuestion=(req,res)=>{
     
   
         manageQuestionsModel.findOne({_id:id},  (err,data)=>{
-        
+            console.log(data);
             hashTags1=data.hashTags
             console.log("first",hashTags1);
             

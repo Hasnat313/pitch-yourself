@@ -7,9 +7,26 @@ const recommendationModel = require("../models/recommendationModel");
 const manageJobsModel = require("../models/manageJobsModel")
 const managePostsModel = require("../models/managePostsModels")
 const manageProjectsModel = require("../models/manageProjectsModel")
-const manageQuestionModel = require("../models/manageQuestionsModel")
+const manageQuestionModel = require("../models/manageQuestionsModel");
 
 
+exports.getRecommendationByUserID=(req,res) => {
+    const userID = req.body.userID;
+    recommendationModel.find({userToWhomRecommendID:userID},(err,data)=>{
+      if(!err){
+        res.json(data);
+      }
+    })
+}
+
+exports.getRecommendationByID=(req,res) => {
+    const id = req.body.recommendationID;
+    recommendationModel.findOne({_id:id},(err,data)=>{
+      if(!err){
+        res.json(data);
+      }
+    })
+}
 
 exports.postRecommendation=(req,res)=>{
     console.log("dafds");
